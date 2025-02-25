@@ -1,24 +1,29 @@
 import mmap
 import os
 import ctypes
+import posix_ipc
+import time
 
 if __name__ == "__main__":
-    class Message(ctypes.Structure):
-        _fields_ = [
-        ("id", ctypes.c_int),
-        ("message", ctypes.c_char * 256),
-        ("language", ctypes.c_int)
-    ]
         
     SHM_NAME = "/shared-memory"
-    SIZE =  256 ##ctypes.sizeof(Message)
+    SIZE =  256
+
+    SEM_NAME = "/semaphore"
 
     with open (f'/dev/shm{SHM_NAME}', "r+b") as f:
         memory = mmap.mmap (f.fileno(), 256)
 
-        memory.seek(0)
-        message = memory[:256].decode().strip()
+        sem = posix_ipc.Semaphore(SEM_NAME)
 
-        print(message)
+        while True:
+            sem.acquire()
+            memory.seek(0)
+            message = memory[:256].decode(errors="replace").rstrip("\x00")
+            
+            sem.release()
+            print(message)
+
+            time.sleep(1);
 
     memory.close()

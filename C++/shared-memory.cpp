@@ -5,9 +5,12 @@
 #include <cstring> 
 #include <semaphore.h>
 #include <iostream>
+#include <limits>
 
 #define SHM_NAME "/shared-memory"
 #define SIZE  256
+
+#define SEM_NAME "/semaphore"
 
 int main(){
 
@@ -28,15 +31,21 @@ int main(){
         return -1;
     }
 
+    sem_t* sem = sem_open(SEM_NAME, O_CREAT, 0666, 1);
 
-    char text[256] = "hello from c++";
+    char text[256] = {0};
 
-    // sem_t* write = sem_open("Write", O_CREAT, 0666, 1);
-    // sem_t* read = sem_open("Read", O_CREAT, 0666, 0);
+    while(text != "exit"){
+        std::cout << "Message: ";
+        std::cin.getline(text, SIZE);
+        //std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-    //sem_wait(write);
+        sem_wait(sem);
 
-    memcpy(address, &text, SIZE);
+        memcpy(address, text, SIZE);
+
+        sem_post(sem);
+    }
 
     std::cout << "wait for python" << std::endl;
     std::cin.get();
