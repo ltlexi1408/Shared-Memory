@@ -14,7 +14,7 @@ struct message{
 };
 
 #define SHM_NAME "/shared-memory"
-#define SIZE sizeof(struct message)
+#define SIZE  256//sizeof(struct message)
 
 int main(){
 
@@ -35,10 +35,12 @@ int main(){
         return -1;
     }
 
-    message text;
-    text.id++;
-    strcpy(text.message, "Hello from c++");
-    text.language = 1;
+    // message text;
+    // text.id++;
+    // strcpy(text.message, "Hello from c++");
+    // text.language = 1;
+
+    char text[256] = "hello from c++";
 
     // sem_t* write = sem_open("Write", O_CREAT, 0666, 1);
     // sem_t* read = sem_open("Read", O_CREAT, 0666, 0);
