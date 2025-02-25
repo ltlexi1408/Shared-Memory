@@ -6,15 +6,8 @@
 #include <semaphore.h>
 #include <iostream>
 
-
-struct message{
-    int id = 0;
-    char message[256];
-    int language;
-};
-
 #define SHM_NAME "/shared-memory"
-#define SIZE  256//sizeof(struct message)
+#define SIZE  256
 
 int main(){
 
@@ -35,10 +28,6 @@ int main(){
         return -1;
     }
 
-    // message text;
-    // text.id++;
-    // strcpy(text.message, "Hello from c++");
-    // text.language = 1;
 
     char text[256] = "hello from c++";
 
