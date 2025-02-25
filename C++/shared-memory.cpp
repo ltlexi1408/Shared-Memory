@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <cstring> 
 #include <semaphore.h>
+#include <iostream>
 
 
 struct message{
@@ -39,9 +40,15 @@ int main(){
     strcpy(text.message, "Hello from c++");
     text.language = 1;
 
-    sem_t* write = sem_open("Write", O_CREAT, 0666, 1);
-    sem_t* read = sem_open("Read", O_CREAT, 0666, 0);
+    // sem_t* write = sem_open("Write", O_CREAT, 0666, 1);
+    // sem_t* read = sem_open("Read", O_CREAT, 0666, 0);
 
+    //sem_wait(write);
+
+    memcpy(address, &text, SIZE);
+
+    std::cout << "wait for python" << std::endl;
+    std::cin.get();
 
     if(munmap(address, SIZE) == -1){
         // Error message
